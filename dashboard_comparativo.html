@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Comparativo Clientes Novos x Cancelados</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #f7f7f7; }
+    h1 { color: #2c3e50; }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #2c3e50; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>Comparativo Clientes Novos x Cancelados</h1>
+  <div id="dashboard"></div>
+  <script>
+    async function loadComparativo() {
+      const url = 'https://script.google.com/macros/s/AKfycbyYwhNmQioB1nLjSMKa8bK4K24NSTp0oN-s1I5jZdBqUGtlkHbpCT4iA4tMiDKoy2rvKg/exec';
+      const res = await fetch(url);
+      const json = await res.json();
+      const data = json.comparativo;
+      let html = '<table><thead><tr><th>Ano</th><th>Novos Clientes</th><th>Valor Novos</th><th>Cancelados</th><th>Valor Cancelados</th></tr></thead><tbody>';
+      data.forEach(item => {
+        html += `<tr>
+          <td>${item.ano}</td>
+          <td>${item.total_novos}</td>
+          <td>R$ ${Number(item.valor_novos).toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+          <td>${item.total_cancelados}</td>
+          <td>R$ ${Number(item.valor_cancelados).toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('dashboard').innerHTML = html;
+    }
+    window.onload = loadComparativo;
+  </script>
+</body>
+</html>
